@@ -6,16 +6,16 @@ frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
 
 class Task():
 	def __init__(self, seconds) -> None:
-		self.state = 0
+		self.done = 0
 		self.seconds = seconds
 
 	def is_done(self):
-		return self.state
+		return self.done
 
 	def run_task(self):
 		for _ in range(self.seconds):
 			sleep(1)
-		self.state = 1
+		self.done = 1
 
 class Spinner():
 	def __init__(self) -> None:
@@ -42,23 +42,26 @@ def main():
 
 	spinner = Spinner()
 
-	all_done = 0
-	while all_done == 0:
+	while 1:
 		line = ""
-		if task1.is_done() == 0:
-			line += f"{spinner.next()}{' ' * 5}"
-		else:
+		total_done = 0
+		if task1.is_done():
 			line += f"Done{' ' * 5}"
+			total_done += 1
+		else:
+			line += f"{spinner.next()}{' ' * 5}"
 
 		if task2.is_done() == 0:
 			line += spinner.next()
+			total_done += 1
 		else:
 			line += "Done"
 
 		print(line, end='\r')
 
-		all_done = task1.is_done() and task2.is_done()
-		sleep(0.5)
+		if total_done == 2:
+			break
+		sleep(0.1)
 
 
 if __name__ == '__main__':
